@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM TUGAS 2 - NIKOLAS WIJAYA</title>
+</head>
+<style>
+    table {
+        border-collapse: collapse;
+        border: 1px solid brown;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        width: 300px;
+        height: 250px;
+    }
+    
+    h2{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    }
+    
+</style>
+
+<body>
+    <center>
+        <h2>Daftar Manusia</h2>
+        <hr style="width:30%">
+        <h1></h1>
+
+        <table>
+            <tr>
+                <td>
+                    Nama
+                </td>
+                <td>
+                    <input type="text" id="nama" placeholder="Masukan Nama">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Usia
+                </td>
+                <td>
+                    <input type="text" id="umur" placeholder="Masukan Umur">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Jenis Kelamin
+                </td>
+                <td>
+                    <input type="radio" name="jenisKelamin" id="jenisKelamin" value="Laki - Laki" checked> Pria
+                    <input type="radio" name="jenisKelamin" id="jenisKelamin2" value="Perempuan"> Wanita
+                </td>
+            </tr>
+            <tr>
+                <td>Pekerjaan</td>
+                <td><input type="text" id="pekerjaan" placeholder="Masukan Pekerjaan"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" onclick="nambahData()" value="SUBMIT"></td>
+
+            </tr>
+            <tr>
+                <td>Sort Berdasarkan</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" onclick="filterNama()" value="Nama">
+                    <input type="submit" onclick="filterUmur()" value="Umur">
+                    <input type="submit" onclick="filterGender()" value="Jenis Kelamin">
+                    <input type="submit" onclick="filterJob()" value="Pekerjaaan">
+                </td>
+            </tr>
+        </table><br>
+
+        <table>
+            <tbody id="tableHasil">
+
+            </tbody>
+        </table>
+    </center>
+
+</body>
+
+<script>
+    class Manusia {
+        constructor(nama, usia, gender, job) {
+            this.nama = nama;
+            this.usia = usia;
+            this.gender = gender;
+            this.job = job;
+        }
+    }
+    var dataManusia = []
+    var nambahData = () => {
+        var nama = document.getElementById("nama").value
+        var umur = document.getElementById("umur").value
+
+        var gender = document.getElementById("jenisKelamin").value
+        if (document.getElementById("jenisKelamin").checked) {
+            var gender = document.getElementById("jenisKelamin").value
+        } else {
+            var gender = document.getElementById("jenisKelamin2").value
+        }
+        var job = document.getElementById("pekerjaan").value
+        if (nama == '' || umur == '' || gender == '' || job == '') {
+            document.getElementsByTagName("h1")[0].style.color = "#ff0000";
+            document.getElementsByTagName("h1")[0].innerHTML = "Ada data yang kosong!"
+        } else {
+            document.getElementsByTagName("h1")[0].innerHTML = ""
+            var orang = new Manusia(nama, umur, gender, job)
+            dataManusia.push(orang)
+            tampilkanData(dataManusia)
+        }
+    }
+
+    var filterUmur = () => {
+        dataManusia.sort(function (a, b) {
+            return parseInt(a.usia) - parseInt(b.usia)
+        })
+        tampilkanData(dataManusia)
+    }
+
+    var filterNama = () => {
+        dataManusia.sort(function (a, b) {
+            if (a.nama < b.nama)
+                return -1;
+            if (a.nama > b.nama)
+                return 1;
+            return 0;
+        })
+        tampilkanData(dataManusia)
+    }
+    var filterGender = () => {
+        dataManusia.sort(function (a, b) {
+            if (a.gender < b.gender)
+                return -1;
+            if (a.gender > b.gender)
+                return 1;
+            return 0;
+        })
+        tampilkanData(dataManusia)
+    }
+    var filterJob = () => {
+        dataManusia.sort(function (a, b) {
+            if (a.job < b.job)
+                return -1;
+            if (a.job > b.job)
+                return 1;
+            return 0;
+        })
+        tampilkanData(dataManusia)
+    }
+
+    var tampilkanData = (pokoknyaArray) => {
+        var output = ''
+        for (var i = 0; i <= pokoknyaArray.length - 1; i++) {
+            output +=
+                `<tr>
+                                                <td>${pokoknyaArray[i].nama}</td> 
+                                                <td>${pokoknyaArray[i].usia}</td>
+                                                <td>${pokoknyaArray[i].gender}</td>
+                                                <td>${pokoknyaArray[i].job}</td>                    
+                </tr>`
+        }
+        document.getElementById("tableHasil").innerHTML = output
+    }
+</script>
+
+
+</html>
